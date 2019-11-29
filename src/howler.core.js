@@ -1,5 +1,5 @@
 /*!
- *  howler.js v2.1.2
+ *  howler.js v2.1.3
  *  howlerjs.com
  *
  *  (c) 2013-2019, James Simpson of GoldFire Studios
@@ -142,6 +142,28 @@
 
             if (sound && sound._node) {
               sound._node.muted = (muted) ? true : sound._muted;
+            }
+          }
+        }
+      }
+
+      return self;
+    },
+
+
+    /**
+     * Stop all sounds
+     * @return {Howler}
+     */
+    stopAll: function() {
+      var self = this || Howler;
+
+      for (var i = self._howls.length - 1; i >= 0; i--) {
+        if (!self._howls[i]._loop) {
+          var sounds = self._howls[i]._sounds;
+          for (var j = 0; j < sounds.length; j++) {
+            if (!sounds[j]._paused) {
+              self._howls[i].stop(sounds[j]._id);
             }
           }
         }
@@ -721,8 +743,8 @@
         // Use the default sound sprite (plays the full audio length).
         sprite = '__default';
 
-        // Check if there is a single paused sound that isn't ended. 
-        // If there is, play that sound. If not, continue as usual.  
+        // Check if there is a single paused sound that isn't ended.
+        // If there is, play that sound. If not, continue as usual.
         if (!self._playLock) {
           var num = 0;
           for (var i=0; i<self._sounds.length; i++) {
